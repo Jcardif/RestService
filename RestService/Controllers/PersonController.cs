@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using RestService.Models;
 
 namespace RestService.Controllers
 {
@@ -16,13 +17,21 @@ namespace RestService.Controllers
         }
 
         // GET: api/Person/5
-        public string Get(int id)
+        public Person Get(int id)
         {
-            return "value";
+            Person p = new Person();
+            p.ID = id;
+            p.FirstName = "Josh";
+            p.LastName = "Cardif";
+            p.PayRate = 56.98;
+            p.EndDate=DateTime.Parse("2/7/2030");
+            p.StartDate=DateTime.Today;
+
+            return p;
         }
 
         // POST: api/Person
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Person person)
         {
         }
 
