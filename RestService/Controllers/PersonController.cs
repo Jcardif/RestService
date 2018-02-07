@@ -19,14 +19,8 @@ namespace RestService.Controllers
         // GET: api/Person/5
         public Person Get(int id)
         {
-            Person p = new Person();
-            p.ID = id;
-            p.FirstName = "Josh";
-            p.LastName = "Cardif";
-            p.PayRate = 56.98;
-            p.EndDate=DateTime.Parse("2/7/2030");
-            p.StartDate=DateTime.Today;
-
+            PersonPersistence pp=new PersonPersistence();
+            Person p = pp.GetPerson(id);
             return p;
         }
 

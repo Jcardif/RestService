@@ -54,10 +54,13 @@ namespace RestService
         }
         public int SavePerson(Person person)
         {
-            string sqlString = "INSERT INTO persontbl (FirstName, LastName, PayRate, StartDate, EndDate) VALUES ('" +
-                               person.FirstName + "','" + person.LastName + "'," + person.PayRate + ",'" +
-                               person.StartDate.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
-                               person.EndDate.ToString("yyyy-MM-dd HH:mm:ss") + "')";
+            //string sqlString = "INSERT INTO persontbl (FirstName, LastName, PayRate, StartDate, EndDate) VALUES ('" +
+            //                   person.FirstName + "','" + person.LastName + "'," + person.PayRate + ",'" +
+            //                   person.StartDate.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
+            //                   person.EndDate.ToString("yyyy-MM-dd HH:mm:ss") + "')";
+
+            string sqlString = $"INSERT INTO `persontbl` (`FirstName`, `LastName`, `PayRate`, `StartDate`, `EndDate`) VALUES( '{person.FirstName}', '{person.LastName}', '{person.PayRate}', '{person.StartDate}', '{person.EndDate}')";
+
             MySqlCommand cmd = new MySqlCommand(sqlString, conn);
             int Id =Convert.ToInt32(cmd.LastInsertedId);
             return Id;
