@@ -31,8 +31,13 @@ namespace RestService.Controllers
         }
 
         // POST: api/Person
-        public void Post([FromBody]Person person)
+        public HttpResponseMessage Post([FromBody]Person person)
         {
+            PersonPersistence pp=new PersonPersistence();
+            long Id = pp.SavePerson(person);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+            response.Headers.Location=new Uri(Request.RequestUri, String.Format($"Person/{Id}"));
+            return response;
         }
 
         // PUT: api/Person/5

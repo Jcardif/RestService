@@ -7,7 +7,7 @@ namespace RestService.Models
 {
     public class Person
     {
-        public long ID  { get; set; }
+        public int ID  { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public Double PayRate { get; set; }
