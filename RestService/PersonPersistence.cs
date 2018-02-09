@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using MySql.Data.MySqlClient;
@@ -13,7 +14,7 @@ namespace RestService
         public List<Person> GetPersons()
         {
             MySqlConnection conn;
-            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            string connectionString = ConfigurationManager.ConnectionStrings["persondbConnectionString"].ConnectionString;
             conn = new MySqlConnection();
             try
             {
@@ -51,7 +52,7 @@ namespace RestService
         public Person GetPerson(int ID)
         {
             MySqlConnection conn;
-            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            string connectionString = ConfigurationManager.ConnectionStrings["persondbConnectionString"].ConnectionString;
             conn = new MySqlConnection();
             try
             {
@@ -92,7 +93,7 @@ namespace RestService
         public int SavePerson(Person person)
         {
             MySqlConnection conn;
-            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            string connectionString = ConfigurationManager.ConnectionStrings["persondbConnectionString"].ConnectionString;
             conn = new MySqlConnection();
             try
             {
@@ -123,7 +124,7 @@ namespace RestService
         public bool DeletePerson(int id)
         {
             MySqlConnection conn;
-            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            string connectionString = ConfigurationManager.ConnectionStrings["persondbConnectionString"].ConnectionString;            
             conn = new MySqlConnection();
             try
             {
@@ -157,7 +158,7 @@ namespace RestService
         {
 
             MySqlConnection conn;
-            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            string connectionString = ConfigurationManager.ConnectionStrings["persondbConnectionString"].ConnectionString;
             conn = new MySqlConnection();
             try
             {
