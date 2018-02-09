@@ -10,120 +10,183 @@ namespace RestService
 {
     public class PersonPersistence
     {
-        private MySql.Data.MySqlClient.MySqlConnection conn;
-
-        public PersonPersistence()
-        {
-            string connectionString;
-            connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
-            try
-            {
-                conn = new MySql.Data.MySqlClient.MySqlConnection();
-                conn.ConnectionString = connectionString;
-                conn.Open();
-            }
-            catch (MySql.Data.MySqlClient.MySqlException e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
         public List<Person> GetPersons()
         {
-            List<Person> personList = new List<Person>();
-            MySqlDataReader reader = null;
-            string sqlString = $"SELECT * FROM persontbl";
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-            reader = cmd.ExecuteReader();
-            while (reader.Read())
+            MySqlConnection conn;
+            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            conn = new MySqlConnection();
+            try
             {
-                Person ps = new Person();
-                ps.ID = reader.GetInt32(0);
-                ps.FirstName = reader.GetString(1);
-                ps.LastName = reader.GetString(2);
-                ps.PayRate = reader.GetDouble(3);
-                ps.StartDate = reader.GetDateTime(4);
-                ps.EndDate = reader.GetDateTime(5);
-                personList.Add(ps);
-            }
+                conn.ConnectionString = connectionString;
+                conn.Open();
 
-            return personList;
+                List<Person> personList = new List<Person>();
+                MySqlDataReader reader = null;
+                string sqlString = $"SELECT * FROM persontbl";
+                MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Person ps = new Person();
+                    ps.ID = reader.GetInt32(0);
+                    ps.FirstName = reader.GetString(1);
+                    ps.LastName = reader.GetString(2);
+                    ps.PayRate = reader.GetDouble(3);
+                    ps.StartDate = reader.GetDateTime(4);
+                    ps.EndDate = reader.GetDateTime(5);
+                    personList.Add(ps);
+                }
+
+                return personList;
+            }
+            catch (MySqlException e)
+            {
+                throw e;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
         public Person GetPerson(int ID)
         {
-            Person ps =new Person();
-            MySqlDataReader reader = null;
-            string sqlString = $"SELECT * FROM persontbl WHERE ID = {ID}";
-            MySqlCommand cmd=new MySqlCommand(sqlString, conn);
-            reader = cmd.ExecuteReader();
-            if (reader.Read())
+            MySqlConnection conn;
+            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            conn = new MySqlConnection();
+            try
             {
-                ps.ID = reader.GetInt32(0);
-                ps.FirstName = reader.GetString(1);
-                ps.LastName = reader.GetString(2);
-                ps.PayRate = reader.GetDouble(3);
-                ps.StartDate = reader.GetDateTime(4);
-                ps.EndDate = reader.GetDateTime(5);
+                conn.ConnectionString = connectionString;
+                conn.Open();
 
-                return ps;
+                Person ps = new Person();
+                MySqlDataReader reader = null;
+                string sqlString = $"SELECT * FROM persontbl WHERE ID = {ID}";
+                MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    ps.ID = reader.GetInt32(0);
+                    ps.FirstName = reader.GetString(1);
+                    ps.LastName = reader.GetString(2);
+                    ps.PayRate = reader.GetDouble(3);
+                    ps.StartDate = reader.GetDateTime(4);
+                    ps.EndDate = reader.GetDateTime(5);
+
+                    return ps;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch (MySqlException e)
             {
-                return null;
+                throw e;
+            }
+            finally
+            {
+                conn.Close();
             }
 
         }
         public int SavePerson(Person person)
         {
-            string sqlString = "INSERT INTO persontbl (ID, FirstName, LastName, PayRate, StartDate, EndDate) VALUES ( '" + person.ID + "', '" +
+            MySqlConnection conn;
+            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            conn = new MySqlConnection();
+            try
+            {
+                conn.ConnectionString = connectionString;
+                conn.Open();
+
+                string sqlString = "INSERT INTO persontbl (ID, FirstName, LastName, PayRate, StartDate, EndDate) VALUES ( '" + person.ID + "', '" +
                                person.FirstName + "','" + person.LastName + "'," + person.PayRate + ",'" +
                                person.StartDate.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
                                person.EndDate.ToString("yyyy-MM-dd HH:mm:ss") + "')";
 
-            //string sqlString =$"INSERT INTO `persondb`.`persontbl` (`FirstName`, `LastName`, `PayRate`, `StartDate`, `EndDate`) VALUES('{person.FirstName}', '{person.LastName}', '{person.PayRate}', '{person.StartDate.ToString("yyyy-MM-dd HH:mm:ss")}', '{person.EndDate.ToString("yyyy-MM-dd HH:mm:ss")}')";
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-            cmd.ExecuteNonQuery();
-            int Id =Convert.ToInt32(cmd.LastInsertedId);
-            return Id;
+                //string sqlString =$"INSERT INTO `persondb`.`persontbl` (`FirstName`, `LastName`, `PayRate`, `StartDate`, `EndDate`) VALUES('{person.FirstName}', '{person.LastName}', '{person.PayRate}', '{person.StartDate.ToString("yyyy-MM-dd HH:mm:ss")}', '{person.EndDate.ToString("yyyy-MM-dd HH:mm:ss")}')";
+                MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+                cmd.ExecuteNonQuery();
+                int Id = Convert.ToInt32(cmd.LastInsertedId);
+                return Id;
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
         public bool DeletePerson(int id)
         {
-            MySqlDataReader reader = null;
-            string sqlString = $"SELECT * FROM persontbl WHERE ID = {id}";
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-            reader = cmd.ExecuteReader();
-            if (reader.Read())
+            MySqlConnection conn;
+            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            conn = new MySqlConnection();
+            try
             {
-                reader.Close();
-                sqlString = $"DELETE FROM persontbl WHERE ID = {id}";
-                cmd = new MySqlCommand(sqlString, conn);
-                cmd.ExecuteNonQuery();
+                conn.ConnectionString = connectionString;
+                conn.Open();
 
-                return true;
+                MySqlDataReader reader = null;
+                string sqlString = $"SELECT * FROM persontbl WHERE ID = {id}";
+                MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    reader.Close();
+                    sqlString = $"DELETE FROM persontbl WHERE ID = {id}";
+                    cmd = new MySqlCommand(sqlString, conn);
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (MySqlException e)
             {
-                return false;
+                throw e;
             }
         }
         public bool UpdatePerson(int id, Person person)
         {
-            MySqlDataReader reader = null;
-            string sqlString=$"SELECT * FROM persontbl WHERE ID = {id}";
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-            reader = cmd.ExecuteReader();
-            if (reader.Read())
+
+            MySqlConnection conn;
+            string connectionString = "server=127.0.0.1;uid=root;pwd=data;database=persondb";
+            conn = new MySqlConnection();
+            try
             {
-                reader.Close();
-                sqlString = $"UPDATE `persondb`.`persontbl` SET `FirstName`= '{person.FirstName}', `LastName`= '{person.LastName}', `PayRate`= '{person.PayRate}', `StartDate`= '{person.StartDate.ToString("yyyy-MM-dd HH:mm:ss")}', `EndDate`= '{person.EndDate.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE `ID`= {id}";
-                cmd = new MySqlCommand(sqlString, conn);
-                cmd.ExecuteNonQuery();
-                return true;
+                conn.ConnectionString = connectionString;
+                conn.Open();
+                MySqlDataReader reader = null;
+                string sqlString = $"SELECT * FROM persontbl WHERE ID = {id}";
+                MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    reader.Close();
+                    sqlString = $"UPDATE `persondb`.`persontbl` SET `FirstName`= '{person.FirstName}', `LastName`= '{person.LastName}', `PayRate`= '{person.PayRate}', `StartDate`= '{person.StartDate.ToString("yyyy-MM-dd HH:mm:ss")}', `EndDate`= '{person.EndDate.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE `ID`= {id}";
+                    cmd = new MySqlCommand(sqlString, conn);
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (MySqlException e)
             {
-                return false;
+                throw e;
+            }
+            finally
+            {
+                conn.Close();
             }
         }
     }

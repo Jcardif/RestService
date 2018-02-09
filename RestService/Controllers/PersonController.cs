@@ -23,6 +23,10 @@ namespace RestService.Controllers
         {
             PersonPersistence pp=new PersonPersistence();
             Person p = pp.GetPerson(id);
+            if (p == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
             return p;
         }
 
