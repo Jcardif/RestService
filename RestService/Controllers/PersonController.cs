@@ -37,8 +37,20 @@ namespace RestService.Controllers
         }
 
         // PUT: api/Person/5
-        public void Put(int id, [FromBody]string value)
+        public HttpResponseMessage Put(int id, [FromBody]Person person)
         {
+            PersonPersistence pp = new PersonPersistence();
+            bool isInRecord = false;
+            HttpResponseMessage response;
+            isInRecord = pp.UpdatePerson(id, person);
+            if (isInRecord)
+            {
+                return response = Request.CreateResponse(HttpStatusCode.NoContent);
+            }
+            else
+            {
+                return response = Request.CreateResponse(HttpStatusCode.NotFound);
+            }
         }
 
         // DELETE: api/Person/5
