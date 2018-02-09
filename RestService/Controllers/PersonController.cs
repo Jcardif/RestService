@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,9 +12,10 @@ namespace RestService.Controllers
     public class PersonController : ApiController
     {
         // GET: api/Person
-        public IEnumerable<string> Get()
+        public List<Person> Get()
         {
-            return new string[] { "Person1", "Person2" };
+            PersonPersistence pp = new PersonPersistence();
+            return pp.GetPersons();
         }
 
         // GET: api/Person/5
@@ -40,8 +42,20 @@ namespace RestService.Controllers
         }
 
         // DELETE: api/Person/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
+            PersonPersistence pp = new PersonPersistence();
+            bool isInRecord = false;
+            HttpResponseMessage response;
+            isInRecord = pp.DeletePerson(id);
+            if (isInRecord)
+            {
+               return response = Request.CreateResponse(HttpStatusCode.NoContent);
+            }
+            else
+            {
+               return response = Request.CreateResponse(HttpStatusCode.NotFound);
+            }
         }
     }
 }

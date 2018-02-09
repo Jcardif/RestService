@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -28,6 +29,27 @@ namespace RestService
             }
         }
 
+        public List<Person> GetPersons()
+        {
+            List<Person> personList = new List<Person>();
+            MySqlDataReader reader = null;
+            string sqlString = $"SELECT * FROM persontbl";
+            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Person ps = new Person();
+                ps.ID = reader.GetInt32(0);
+                ps.FirstName = reader.GetString(1);
+                ps.LastName = reader.GetString(2);
+                ps.PayRate = reader.GetDouble(3);
+                ps.StartDate = reader.GetDateTime(4);
+                ps.EndDate = reader.GetDateTime(5);
+                personList.Add(ps);
+            }
+
+            return personList;
+        }
         public Person GetPerson(int ID)
         {
             Person ps =new Person();
@@ -64,6 +86,26 @@ namespace RestService
             MySqlCommand cmd = new MySqlCommand(sqlString, conn);
             int Id =Convert.ToInt32(cmd.LastInsertedId);
             return Id;
+        }
+        public bool DeletePerson(int id)
+        {
+            MySqlDataReader reader = null;
+            string sqlString = $"SELECT * FROM persontbl WHERE ID = {id}";
+            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+            reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                reader.Close();
+                sqlString = $"DELETE FROM persontbl WHERE ID = {id}";
+                cmd = new MySqlCommand(sqlString, conn);
+                cmd.ExecuteNonQuery();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
